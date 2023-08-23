@@ -4,7 +4,6 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import * as dotenv from 'dotenv';
 import * as cookieParser from 'cookie-parser';
-import { AuthGuard } from '@nestjs/passport';
 
 async function bootstrap() {
   dotenv.config();

@@ -1,7 +1,7 @@
 import {
   CanActivate,
   ExecutionContext,
-  HttpException,
+  // HttpException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
