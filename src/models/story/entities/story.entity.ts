@@ -1,28 +1,32 @@
+import { ObjectId } from 'mongodb';
 import {
-  Entity,
-  ObjectIdColumn,
-  ObjectId,
   Column,
   CreateDateColumn,
+  Entity,
+  ObjectIdColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Url } from 'url';
 
 @Entity()
-export class Boardmember {
+export class Story {
   @ObjectIdColumn()
   _id: ObjectId | string;
 
-  @Column({ unique: true })
-  id: string;
+  @Column()
+  storyId: string;
 
   @Column()
-  image: string;
+  image: string | Url;
 
   @Column()
-  name: string;
+  title: string;
 
   @Column()
-  role: string;
+  content: string;
+
+  @Column()
+  youtube_link?: string | Url;
 
   @CreateDateColumn()
   createdAt: string;

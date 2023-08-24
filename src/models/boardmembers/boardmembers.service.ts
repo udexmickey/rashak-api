@@ -1,15 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBoardmemberDto } from './dto/create-boardmember.dto';
 import { UpdateBoardmemberDto } from './dto/update-boardmember.dto';
+import { Repository } from 'typeorm';
+import { Boardmember } from './entities/boardmember.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class BoardmembersService {
-  create(createBoardmemberDto: CreateBoardmemberDto) {
-    return 'This action adds a new boardmember';
+  constructor(
+    @InjectRepository(Boardmember)
+    private boardmemberRepo: Repository<Boardmember>,
+  ) {}
+  async create(createBoardmemberDto: CreateBoardmemberDto) {
+    const newBoardmember = this.boardmemberRepo.create(createBoardmemberDto);
+    return await this.boardmemberRepo.save(newBoardmember);
   }
 
-  findAll() {
-    return `This action returns all boardmembers`;
+  async findAll() {
+    const allBoardmember = await this.boardmemberRepo.find();
+    return allBoardmember;
   }
 
   findOne(id: number) {
