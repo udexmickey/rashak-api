@@ -13,7 +13,7 @@ import { Story } from '../models/story/entities/story.entity';
         type: 'mongodb',
         host: configService.get('DATABASE_Host'),
         port: +configService.get('DATABASE_PORT'),
-        database: configService.get('DATABASE_NAME'),
+        database: configService.get('DATABASE_NAME_2'),
         entities: [Admin, Boardmember, Story],
         synchronize: true,
         autoLoadEntities: true,

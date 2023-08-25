@@ -12,7 +12,7 @@ export class AdminDto {
   department: string;
 
   @Expose()
-  id: string;
+  adminId: string;
 
   @Expose()
   createdAt: Date;

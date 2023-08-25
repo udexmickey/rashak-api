@@ -1,4 +1,5 @@
 import {
+  BadGatewayException,
   HttpException,
   Injectable,
   NotFoundException,
@@ -9,6 +10,7 @@ import { UpdateAdminDto } from './dto/update-admin.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Admin } from './entities/admin.entity';
+import { LoginDto } from '../auth/dto/login.dto';
 // import { ObjectId } from 'mongodb';
 
 @Injectable()
@@ -25,10 +27,10 @@ export class AdminsService {
 
   async findAll() {
     const admins = await this.repo.find();
-    return admins;
+    return admins.reverse();
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<Admin> {
     try {
       const admin = await this.repo.findOneBy(
         //Here i'm using a new instaince of mongodb objectId as my query id
@@ -37,7 +39,7 @@ export class AdminsService {
 
         //also you can comment the unique _id from mongo and use the id from uuid
         //Which is the normal id string from uuid
-        { id }, //uncomment this line if you which to use id from uuid
+        { adminId: id }, //uncomment this line if you which to use id from uuid
 
         // note: The two id/s is not same one is from mongo and the other is from uuid,
         //but they are both unique and belongs to an admin
@@ -45,21 +47,34 @@ export class AdminsService {
       if (!admin) throw new NotFoundException('Admin not found').getResponse();
       return admin;
     } catch (error) {
-      throw new HttpException(error.message, error.statusCode);
+      throw new HttpException(error.message, error.statusCode || 500);
     }
   }
 
-  async update(id: string, updateAdminDto: UpdateAdminDto) {
-    const foundAdmin = await this.findOne(id);
-    if (!foundAdmin) throw new NotFoundException('Admin not found');
+  async update(id: string, updateAdminDto: UpdateAdminDto): Promise<Admin> {
+    try {
+      const foundAdmin = await this.findOne(id);
 
-    Object.assign(foundAdmin, updateAdminDto);
-    return this.repo.save(foundAdmin);
+      Object.assign(foundAdmin, updateAdminDto);
+      return this.repo.save(foundAdmin);
+    } catch (error) {
+      throw new HttpException(error.message, error.statusCode || 500);
+    }
   }
 
   async remove(id: string) {
-    const admin = await this.findOne(id);
-    if (!admin) throw new NotFoundException('Admin not found');
-    return { deletedUser: this.repo.remove(admin), message: 'Admin deleted' };
+    try {
+      const admin = await this.findOne(id);
+      return { deletedUser: this.repo.remove(admin), message: 'Admin deleted' };
+    } catch (error) {
+      throw new HttpException(error.message, error.statusCode || 500);
+    }
+  }
+
+  //Forgotten Password
+  async forgetPassword(updateAdminDto: LoginDto) {
+    const findEmail = await this.findEmail(updateAdminDto.email);
+    if (!findEmail)
+      throw new BadGatewayException('Invalid credentials').getResponse(); //TODO ## Forget password
   }
 }

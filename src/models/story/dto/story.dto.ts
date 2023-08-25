@@ -11,7 +11,7 @@ export class StoryDto {
   content: string;
 
   @Expose()
-  youtube_link?: string;
+  youtube_link: string;
 
   @Expose()
   storyId: string;

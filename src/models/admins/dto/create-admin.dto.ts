@@ -1,9 +1,16 @@
-import { IsEmail, IsEnum, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 import { DepartmentEnum } from 'src/utils/Enum/department.enum';
 
 export class CreateAdminDto {
-  // @IsString()
-  // id: string;
+  @IsString()
+  @IsOptional()
+  adminId?: string;
 
   @IsEmail()
   email: string;

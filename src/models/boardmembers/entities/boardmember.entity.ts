@@ -13,7 +13,7 @@ export class Boardmember {
   _id: ObjectId | string;
 
   @Column({ unique: true })
-  id: string;
+  boardmemberId: string;
 
   @Column()
   image: string;
@@ -25,8 +25,8 @@ export class Boardmember {
   role: string;
 
   @CreateDateColumn()
-  createdAt: string;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: string;
+  updatedAt: Date;
 }

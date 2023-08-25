@@ -68,7 +68,7 @@ export class AuthService {
       //@nestjs/config is same as proccess.env.SALTROUNDS
       const saltRounds = +this.configService.get<number>('SALTROUNDS');
       const hashPassword = await bcrypt.hash(body.password, saltRounds);
-      const payload = { ...body, id: adminId, password: hashPassword };
+      const payload = { ...body, adminId, password: hashPassword };
 
       //
       const access_token = await this.signJwtToken(
@@ -88,7 +88,7 @@ export class AuthService {
         },
       };
     } catch (error) {
-      throw new HttpException(error.message, error.statusCode);
+      throw new HttpException(error.message, error.statusCode || 500);
     }
   }
 
@@ -99,7 +99,7 @@ export class AuthService {
 
       //SignIn Jwt with AdminId and also store them in the hearder cookie
       const access_token = await this.signJwtToken(
-        admin.id,
+        admin.adminId,
         admin.department,
         response,
       );
@@ -112,18 +112,22 @@ export class AuthService {
         },
       };
     } catch (error) {
-      throw new HttpException(error.message, error.statusCode);
+      throw new HttpException(error.message, error.statusCode || 500);
     }
   }
 
   async logout(response: Response) {
-    //make sure the passed in string is the
-    //correct name you used to store the cookie
-    response.clearCookie('accessKeyToken');
-    //Clear the cookies to logout
+    try {
+      //make sure the passed in string is the
+      //correct name you used to store the cookie
+      response.clearCookie('accessKeyToken');
+      //Clear the cookies to logout
 
-    return {
-      message: `You have successfully logged out, We hope to see you back soon`,
-    };
+      return {
+        message: `You have successfully logged out, We hope to see you back soon`,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, error.statusCode || 500);
+    }
   }
 }

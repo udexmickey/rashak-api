@@ -11,9 +11,6 @@ import { AdminsService } from './admins.service';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { SerializeResponse } from 'src/utils/Decorators/serializer.decorator';
 import { AdminDto } from '../auth/dto/admin.dto';
-import { Department } from 'src/utils/Decorators/department.decorator';
-import { DepartmentEnum } from 'src/utils/Enum/department.enum';
-import { DepartmentGuard } from 'src/utils/Guards/department.guard';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 
 @Controller('admins')
@@ -23,13 +20,12 @@ export class AdminsController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  findAll() {
-    return this.adminsService.findAll();
+  async findAll() {
+    const allAdmin = await this.adminsService.findAll();
+    return allAdmin;
   }
 
   @Get('/:id')
-  @UseGuards(JwtAuthGuard, DepartmentGuard)
-  @Department(DepartmentEnum.IT)
   findOne(@Param('id') id: string) {
     return this.adminsService.findOne(id);
   }

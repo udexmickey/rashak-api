@@ -14,7 +14,7 @@ export class Admin {
   _id: ObjectId | string;
 
   @Column({ unique: true })
-  id: string;
+  adminId: string;
 
   @Column({ unique: true })
   email: string;

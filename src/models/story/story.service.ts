@@ -24,7 +24,7 @@ export class StoryService {
   async findAll() {
     try {
       const allStories = await this.storyRepo.find();
-      return allStories;
+      return allStories.reverse();
     } catch (error) {
       throw new HttpException(error.message, error.statusCode || 500);
     }

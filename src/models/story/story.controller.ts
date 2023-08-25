@@ -10,9 +10,11 @@ import {
 import { StoryService } from './story.service';
 import { CreateStoryDto } from './dto/create-story.dto';
 import { UpdateStoryDto } from './dto/update-story.dto';
+import { SerializeResponse } from 'src/utils/Decorators/serializer.decorator';
+import { StoryDto } from './dto/story.dto';
 
 @Controller('story')
-// @SerializeResponse(AdminDto)
+@SerializeResponse(StoryDto)
 export class StoryController {
   constructor(private readonly storyService: StoryService) {}
 

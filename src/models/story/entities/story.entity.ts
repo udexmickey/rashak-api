@@ -13,7 +13,7 @@ export class Story {
   @ObjectIdColumn()
   _id: ObjectId | string;
 
-  @Column()
+  @Column({ unique: true })
   storyId: string;
 
   @Column()

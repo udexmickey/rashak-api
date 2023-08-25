@@ -1,11 +1,9 @@
-import { IsDateString, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateBoardmemberDto {
   @IsString()
-  _id: string;
-
-  @IsString()
-  id: string;
+  @IsOptional()
+  boardmemberId?: string;
 
   @IsString()
   image: string;
@@ -15,10 +13,4 @@ export class CreateBoardmemberDto {
 
   @IsString()
   role: string;
-
-  @IsDateString()
-  createdAt: string;
-
-  @IsDateString()
-  updatedAt: string;
 }

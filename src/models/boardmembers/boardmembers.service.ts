@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBoardmemberDto } from './dto/create-boardmember.dto';
 import { UpdateBoardmemberDto } from './dto/update-boardmember.dto';
 import { Repository } from 'typeorm';
 import { Boardmember } from './entities/boardmember.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class BoardmembersService {
@@ -12,24 +13,57 @@ export class BoardmembersService {
     private boardmemberRepo: Repository<Boardmember>,
   ) {}
   async create(createBoardmemberDto: CreateBoardmemberDto) {
-    const newBoardmember = this.boardmemberRepo.create(createBoardmemberDto);
-    return await this.boardmemberRepo.save(newBoardmember);
+    try {
+      const boardmemberId = uuid();
+      const payload = { ...createBoardmemberDto, boardmemberId };
+      const newBoardmember = this.boardmemberRepo.create(payload);
+      return await this.boardmemberRepo.save(newBoardmember);
+    } catch (error) {
+      throw new HttpException(error.message, error.statusCode ?? 500);
+    }
   }
 
   async findAll() {
-    const allBoardmember = await this.boardmemberRepo.find();
-    return allBoardmember;
+    try {
+      const allBoardmembers = await this.boardmemberRepo.find();
+      return allBoardmembers.reverse();
+    } catch (error) {
+      throw new HttpException(error.message, error.statusCode ?? 500);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} boardmember`;
+  async findOne(id: string) {
+    const findBoardMember = await this.boardmemberRepo.findOneBy({
+      boardmemberId: id,
+    });
+    if (!findBoardMember)
+      throw new NotFoundException('Boardmember not found').getResponse();
+    return findBoardMember;
   }
 
-  update(id: number, updateBoardmemberDto: UpdateBoardmemberDto) {
-    return `This action updates a #${id} boardmember`;
+  async update(id: string, updateBoardmemberDto: UpdateBoardmemberDto) {
+    try {
+      const findBoardMember = await this.findOne(id);
+      const boardmember = Object.assign(findBoardMember, updateBoardmemberDto);
+      const updateBoardmember = await this.boardmemberRepo.save(boardmember);
+      return updateBoardmember;
+    } catch (error) {
+      throw new HttpException(error.message, error.statusCode ?? 500);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} boardmember`;
+  async remove(id: string) {
+    try {
+      const findBoardMember = await this.findOne(id);
+      const deletedBoardMember = await this.boardmemberRepo.remove(
+        findBoardMember,
+      );
+      return {
+        deletedBoardMember,
+        message: `${findBoardMember.name} was removed from the board`,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, error.statusCode ?? 500);
+    }
   }
 }
