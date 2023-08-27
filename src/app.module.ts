@@ -11,6 +11,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { StoryModule } from './models/story/story.module';
 import { MailsModule } from './models/mails/mails.module';
+import { TeamMemberModule } from './models/teammeber/teammember.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { MailsModule } from './models/mails/mails.module';
     AuthModule,
     StoryModule,
     MailsModule,
+    TeamMemberModule,
   ],
   controllers: [AppController],
   providers: [
