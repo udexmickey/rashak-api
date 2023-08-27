@@ -10,8 +10,11 @@ import {
 import { LocationService } from './location.service';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
+import { LocationDto } from './dto/location.dto';
+import { SerializeResponse } from 'src/utils/Decorators/serializer.decorator';
 
 @Controller('location')
+@SerializeResponse(LocationDto)
 export class LocationController {
   constructor(private readonly locationService: LocationService) {}
 

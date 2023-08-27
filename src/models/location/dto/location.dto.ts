@@ -1,6 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
 
-export class StoryDto {
+export class LocationDto {
   @Expose()
   communities: string[];
 
