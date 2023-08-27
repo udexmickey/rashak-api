@@ -21,6 +21,8 @@ export class MailsService {
     });
   }
 
+  //Todo - send bulk mails
+  //send to an email works fine but then i want to add send to multiple emails
   async sendNewsLetterSubscribers(email: any) {
     try {
       const newSub = await this.mailerService.sendMail({

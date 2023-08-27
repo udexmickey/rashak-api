@@ -148,11 +148,10 @@ export class AuthService {
       //Todo After getting to work
       //send it to the auth endpoint, where
       //it will be consummed as part of the authentication process
-      message: 'TODO: i am still under testing',
+      message: 'TODO: currently under construction',
     };
   }
 
-  //Todo add change password function
   async changePassword(admin: Admin, newPassword: ChangePasswordDto) {
     //Fisrt you'll have to be logged in for this to work
     try {
