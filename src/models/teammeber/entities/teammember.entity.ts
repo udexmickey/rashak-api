@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  PrimaryColumn,
 } from 'typeorm';
 
 @Entity()
@@ -12,7 +13,7 @@ export class TeamMember {
   @ObjectIdColumn()
   _id: ObjectId | string;
 
-  @Column({ unique: true })
+  @PrimaryColumn({ unique: true })
   teamMemberId: string;
 
   @Column()

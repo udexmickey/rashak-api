@@ -16,6 +16,7 @@ import { CurrentAdmin } from 'src/utils/Decorators/current-admin.decorator';
 import { Admin } from '../admins/entities/admin.entity';
 import { NoAuth } from 'src/utils/Decorators/noAuth.decorator';
 import { CurrentUserInterceptor } from './interceptors/current-admin.interceptor';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Controller('auth')
 //This is the controlling the response payload
@@ -60,5 +61,21 @@ export class AuthController {
   @UseInterceptors(CurrentUserInterceptor)
   currentUser(@CurrentAdmin() admin: Admin) {
     return admin;
+  }
+
+  //Todo not fully implemented yet
+  @Post('/forgetPassword')
+  forgetPassword(@Body() body: LoginDto) {
+    return this.authService.forgetPassword(body);
+  }
+
+  //Todo still in testing mode
+  @UseInterceptors(CurrentUserInterceptor)
+  @Post('/changepassword')
+  AuthChangePassword(
+    @CurrentAdmin() admin: Admin,
+    @Body() newPassword: ChangePasswordDto,
+  ) {
+    return this.authService.changePassword(admin, newPassword);
   }
 }

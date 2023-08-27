@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   Entity,
   ObjectIdColumn,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Url } from 'url';
@@ -13,7 +14,7 @@ export class Story {
   @ObjectIdColumn()
   _id: ObjectId | string;
 
-  @Column({ unique: true })
+  @PrimaryColumn({ unique: true })
   storyId: string;
 
   @Column()

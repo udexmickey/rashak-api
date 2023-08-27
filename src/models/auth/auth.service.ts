@@ -13,6 +13,8 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { DepartmentEnum } from 'src/utils/Enum/department.enum';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import { Admin } from '../admins/entities/admin.entity';
 
 @Injectable()
 export class AuthService {
@@ -127,6 +129,68 @@ export class AuthService {
         message: `You have successfully logged out, We hope to see you back soon`,
       };
     } catch (error) {
+      throw new HttpException(error.message, error.statusCode || 500);
+    }
+  }
+
+  //Todo add Forget password function
+  async forgetPassword(updateAdminDto: LoginDto) {
+    const findEmail = await this.adminService.findEmail(updateAdminDto.email);
+    if (!findEmail)
+      throw new BadGatewayException('Invalid credentials').getResponse();
+    //Todo send a (token) with link to their correct provided email for then to generate new password
+
+    // const sendPassword = await this.mailsService.sendNewsLetterSubscribers(
+    //   findEmail.email,
+    // );
+
+    return {
+      //Todo After getting to work
+      //send it to the auth endpoint, where
+      //it will be consummed as part of the authentication process
+      message: 'TODO: i am still under testing',
+    };
+  }
+
+  //Todo add change password function
+  async changePassword(admin: Admin, newPassword: ChangePasswordDto) {
+    //Fisrt you'll have to be logged in for this to work
+    try {
+      //1. compare old password with the hashed password of the logged in admin
+      const recoverOldPassword = await bcrypt.compare(
+        newPassword.oldPassword,
+        admin.password,
+      );
+
+      //2. if old password don't match with the hashed password of the logged in admin
+      //throw an unauthorized Exception / Error
+      if (!recoverOldPassword)
+        throw new UnauthorizedException('Incorrect Password').getResponse();
+
+      //3. Hash the new password
+      const saltRounds = +this.configService.get<number>('SALTROUNDS');
+      const hashedNewPassword = await bcrypt.hash(
+        newPassword.newPassword,
+        saltRounds,
+      );
+
+      //4. Assign/Update the new Password to the admin password property
+      //which new now be the new password
+      Object.assign(admin, {
+        ...admin,
+        password: hashedNewPassword,
+      });
+
+      //5. Save the new password as now the password of the logged in admin
+      //this means it was successful
+      await this.adminService.changePassword(admin);
+
+      return {
+        //Just return a message when the operation above was run successfully
+        message: 'You Password was changed successfully',
+      };
+    } catch (error) {
+      //throw error if any error was detected all any point while run the operation/function/logic above
       throw new HttpException(error.message, error.statusCode || 500);
     }
   }

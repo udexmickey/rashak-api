@@ -1,10 +1,4 @@
-import {
-  BadGatewayException,
-  HttpException,
-  Injectable,
-  NotFoundException,
-  // UnauthorizedException,
-} from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,7 +6,6 @@ import { Repository } from 'typeorm';
 import { Admin } from './entities/admin.entity';
 import { LoginDto } from '../auth/dto/login.dto';
 import { MailsService } from '../mails/mails.service';
-// import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class AdminsService {
@@ -75,14 +68,12 @@ export class AdminsService {
     }
   }
 
-  //Forgotten Password
+  //Todo - Forgotten Password
   async forgetPassword(updateAdminDto: LoginDto) {
-    const findEmail = await this.findEmail(updateAdminDto.email);
-    if (!findEmail)
-      throw new BadGatewayException('Invalid credentials').getResponse(); //TODO ## Forget password
-    const sendPassword = await this.mailsService.sendNewsLetterSubscribers(
-      findEmail.email,
-    );
-    return sendPassword;
+    return await this.repo.save(updateAdminDto);
+  }
+
+  async changePassword(changePasswordDto: Admin) {
+    return await this.repo.save(changePasswordDto);
   }
 }

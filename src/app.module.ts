@@ -12,6 +12,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { StoryModule } from './models/story/story.module';
 import { MailsModule } from './models/mails/mails.module';
 import { TeamMemberModule } from './models/teammeber/teammember.module';
+import { LocationModule } from './models/location/location.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { TeamMemberModule } from './models/teammeber/teammember.module';
     StoryModule,
     MailsModule,
     TeamMemberModule,
+    LocationModule,
   ],
   controllers: [AppController],
   providers: [
