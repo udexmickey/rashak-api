@@ -10,13 +10,14 @@ import configuration from './config/configuration';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { StoryModule } from './models/story/story.module';
+import { MailsModule } from './models/mails/mails.module';
 
 @Module({
   imports: [
     //This line helps nest understand the proccess.env.path_name
     //or the configService provided by nest for environment
     ConfigModule.forRoot({
-      envFilePath: ['.env.development'],
+      envFilePath: ['.env.development', '.env'],
       isGlobal: true,
       load: [configuration],
     }),
@@ -36,6 +37,7 @@ import { StoryModule } from './models/story/story.module';
     AdminsModule,
     AuthModule,
     StoryModule,
+    MailsModule,
   ],
   controllers: [AppController],
   providers: [

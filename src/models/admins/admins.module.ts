@@ -5,9 +5,10 @@ import { Admin } from './entities/admin.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthGuard } from '../auth/guard/auth.guard';
 import { JwtService } from '@nestjs/jwt';
+import { MailsModule } from '../mails/mails.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Admin])],
+  imports: [TypeOrmModule.forFeature([Admin]), MailsModule],
   controllers: [AdminsController],
   providers: [AdminsService, AuthGuard, JwtService],
   exports: [AdminsService],

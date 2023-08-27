@@ -11,11 +11,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Admin } from './entities/admin.entity';
 import { LoginDto } from '../auth/dto/login.dto';
+import { MailsService } from '../mails/mails.service';
 // import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class AdminsService {
-  constructor(@InjectRepository(Admin) private repo: Repository<Admin>) {}
+  constructor(
+    @InjectRepository(Admin) private repo: Repository<Admin>,
+    private mailsService: MailsService,
+  ) {}
   async create(body: CreateAdminDto) {
     return await this.repo.save(body);
   }
@@ -76,5 +80,9 @@ export class AdminsService {
     const findEmail = await this.findEmail(updateAdminDto.email);
     if (!findEmail)
       throw new BadGatewayException('Invalid credentials').getResponse(); //TODO ## Forget password
+    const sendPassword = await this.mailsService.sendNewsLetterSubscribers(
+      findEmail.email,
+    );
+    return sendPassword;
   }
 }

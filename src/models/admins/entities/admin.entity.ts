@@ -19,6 +19,9 @@ export class Admin {
   @Column({ unique: true })
   email: string;
 
+  @Column({ default: false })
+  public isEmailConfirmed: boolean;
+
   @Column()
   password: string;
 

@@ -6,12 +6,14 @@ import {
   Param,
   Delete,
   UseGuards,
+  Post,
 } from '@nestjs/common';
 import { AdminsService } from './admins.service';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { SerializeResponse } from 'src/utils/Decorators/serializer.decorator';
 import { AdminDto } from '../auth/dto/admin.dto';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import { LoginDto } from '../auth/dto/login.dto';
 
 @Controller('admins')
 @SerializeResponse(AdminDto)
@@ -38,5 +40,10 @@ export class AdminsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.adminsService.remove(id);
+  }
+
+  @Post('/forgetPassword')
+  forgetPassword(@Body() body: LoginDto) {
+    return this.adminsService.forgetPassword(body);
   }
 }
