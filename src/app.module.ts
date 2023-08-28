@@ -13,6 +13,7 @@ import { StoryModule } from './models/story/story.module';
 import { MailsModule } from './models/mails/mails.module';
 import { TeamMemberModule } from './models/teammeber/teammember.module';
 import { LocationModule } from './models/location/location.module';
+import { PartnerModule } from './models/partner/partner.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { LocationModule } from './models/location/location.module';
     MailsModule,
     TeamMemberModule,
     LocationModule,
+    PartnerModule,
   ],
   controllers: [AppController],
   providers: [
