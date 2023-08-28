@@ -10,5 +10,6 @@ export class CreatePartnerDto {
   companyName: string;
 
   @IsString()
-  image: string | Url;
+  @IsOptional()
+  image?: string | Url;
 }

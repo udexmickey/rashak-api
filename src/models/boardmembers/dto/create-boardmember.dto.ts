@@ -6,7 +6,8 @@ export class CreateBoardmemberDto {
   boardmemberId?: string;
 
   @IsString()
-  image: string;
+  @IsOptional()
+  image?: string;
 
   @IsString()
   name: string;

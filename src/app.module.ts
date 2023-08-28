@@ -14,6 +14,9 @@ import { MailsModule } from './models/mails/mails.module';
 import { TeamMemberModule } from './models/teammeber/teammember.module';
 import { LocationModule } from './models/location/location.module';
 import { PartnerModule } from './models/partner/partner.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { FileUploadService } from './models/file-upload/file-upload.service';
+import { FileUploadModule } from './models/file-upload/file-upload.module';
 
 @Module({
   imports: [
@@ -44,6 +47,8 @@ import { PartnerModule } from './models/partner/partner.module';
     TeamMemberModule,
     LocationModule,
     PartnerModule,
+    CloudinaryModule,
+    FileUploadModule,
   ],
   controllers: [AppController],
   providers: [
@@ -52,6 +57,7 @@ import { PartnerModule } from './models/partner/partner.module';
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
+    FileUploadService,
   ],
 })
 export class AppModule {}

@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { StoryService } from './story.service';
 import { CreateStoryDto } from './dto/create-story.dto';
 import { UpdateStoryDto } from './dto/update-story.dto';
 import { SerializeResponse } from 'src/utils/Decorators/serializer.decorator';
 import { StoryDto } from './dto/story.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('story')
 @SerializeResponse(StoryDto)
@@ -19,8 +22,12 @@ export class StoryController {
   constructor(private readonly storyService: StoryService) {}
 
   @Post()
-  create(@Body() createStoryDto: CreateStoryDto) {
-    return this.storyService.create(createStoryDto);
+  @UseInterceptors(FileInterceptor('file'))
+  async create(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createStoryDto: CreateStoryDto,
+  ) {
+    return this.storyService.create(file, createStoryDto);
   }
 
   @Get()

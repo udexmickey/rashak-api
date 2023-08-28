@@ -7,7 +7,8 @@ export class CreateStoryDto {
   storyId?: string;
 
   @IsString()
-  image: string | Url;
+  @IsOptional()
+  image?: string | Url;
 
   @IsString()
   title: string;

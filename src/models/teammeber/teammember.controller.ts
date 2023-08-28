@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   UseGuards,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { TeamMemberService } from './teammember.service';
 import { CreateTeamMemberDto } from './dto/create-teammember.dto';
@@ -14,6 +16,7 @@ import { UpdateTeamMemberDto } from './dto/update-teammember.dto';
 import { Department } from 'src/utils/Decorators/department.decorator';
 import { DepartmentEnum } from 'src/utils/Enum/department.enum';
 import { DepartmentGuard } from 'src/utils/Guards/department.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('teammembers')
 export class TeamMemberController {
@@ -22,8 +25,12 @@ export class TeamMemberController {
   @Post()
   @UseGuards(DepartmentGuard)
   @Department(DepartmentEnum.IT)
-  create(@Body() createTeamMemberDto: CreateTeamMemberDto) {
-    return this.teammemberService.create(createTeamMemberDto);
+  @UseInterceptors(FileInterceptor('file'))
+  async create(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createTeamMemberDto: CreateTeamMemberDto,
+  ) {
+    return this.teammemberService.create(file, createTeamMemberDto);
   }
 
   @Get()

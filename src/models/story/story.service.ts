@@ -5,15 +5,23 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Story } from './entities/story.entity';
 import { v4 as uuid } from 'uuid';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Injectable()
 export class StoryService {
-  constructor(@InjectRepository(Story) private storyRepo: Repository<Story>) {}
+  constructor(
+    @InjectRepository(Story) private storyRepo: Repository<Story>,
+    private cloudinaryService: CloudinaryService,
+  ) {}
 
-  async create(createStoryDto: CreateStoryDto) {
+  async create(filename: Express.Multer.File, createStoryDto: CreateStoryDto) {
     try {
       const storyId = uuid();
-      const payload = { ...createStoryDto, storyId };
+      const image = await this.cloudinaryService.uploadImage(
+        filename,
+        'StoryFolder',
+      );
+      const payload = { ...createStoryDto, storyId, image: image.url };
       const newStory = this.storyRepo.create(payload);
       return await this.storyRepo.save(newStory);
     } catch (error) {

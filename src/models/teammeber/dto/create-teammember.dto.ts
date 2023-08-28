@@ -6,7 +6,8 @@ export class CreateTeamMemberDto {
   teamMemberId?: string;
 
   @IsString()
-  image: string;
+  @IsOptional()
+  image?: string;
 
   @IsString()
   name: string;

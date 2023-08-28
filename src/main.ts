@@ -4,10 +4,13 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import * as dotenv from 'dotenv';
 import * as cookieParser from 'cookie-parser';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   dotenv.config();
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    rawBody: true,
+  });
 
   const config = app.get<ConfigService>(ConfigService);
   const frontEndBaseUrl: string = config.get('Rashak_Frontend_URL');

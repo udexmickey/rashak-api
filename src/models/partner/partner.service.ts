@@ -5,17 +5,49 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Partner } from './entities/partner.entity';
 import { Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Injectable()
 export class PartnerService {
   constructor(
     @InjectRepository(Partner) private partnerRepo: Repository<Partner>,
+    private cloudinaryService: CloudinaryService,
   ) {}
-  async create(createPartnerDto: CreatePartnerDto) {
+
+  // Tester Not to needed
+  async TestUploadFile(filename: Express.Multer.File) {
+    const image = await this.cloudinaryService.uploadImage(
+      filename,
+      'PartnerFolder',
+    );
+    return image;
+  }
+
+  // // Tester multiple uploads Not to needed
+  // async TestUploadFiles(filename: Express.Multer.File) {
+  //   const image = await this.cloudinaryService.uploadImage(
+  //     filename,
+  //     'MultipleTestingFolder',
+  //   );
+  //   return image;
+  // }
+
+  async create(
+    filename: Express.Multer.File,
+    createPartnerDto: CreatePartnerDto,
+  ) {
     try {
       const partnerId = uuid();
-      const payload = { ...createPartnerDto, partnerId };
-      const body = this.partnerRepo.create(payload);
+      const image = await this.cloudinaryService.uploadImage(
+        filename,
+        'PartnerFolder',
+      );
+      const payload = {
+        ...createPartnerDto,
+        partnerId,
+        image: image.url,
+      };
+      const body = await this.partnerRepo.create(payload);
       const newPartner = await this.partnerRepo.save(body);
       return newPartner;
     } catch (error) {

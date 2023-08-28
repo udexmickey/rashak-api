@@ -5,17 +5,31 @@ import { Repository } from 'typeorm';
 import { Boardmember } from './entities/boardmember.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { v4 as uuid } from 'uuid';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Injectable()
 export class BoardmembersService {
   constructor(
     @InjectRepository(Boardmember)
     private boardmemberRepo: Repository<Boardmember>,
+    private cloudinaryService: CloudinaryService,
   ) {}
-  async create(createBoardmemberDto: CreateBoardmemberDto) {
+  async create(
+    filename: Express.Multer.File,
+    createBoardmemberDto: CreateBoardmemberDto,
+  ) {
     try {
       const boardmemberId = uuid();
-      const payload = { ...createBoardmemberDto, boardmemberId };
+      const image = await this.cloudinaryService.uploadImage(
+        filename,
+        'BoardMember Folder',
+      );
+      const payload = {
+        ...createBoardmemberDto,
+        boardmemberId,
+        image: image.url,
+      };
+      // const payload = { ...createBoardmemberDto, boardmemberId };
       const newBoardmember = this.boardmemberRepo.create(payload);
       return await this.boardmemberRepo.save(newBoardmember);
     } catch (error) {
