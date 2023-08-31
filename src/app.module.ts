@@ -17,6 +17,7 @@ import { PartnerModule } from './models/partner/partner.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { FileUploadService } from './models/file-upload/file-upload.service';
 import { FileUploadModule } from './models/file-upload/file-upload.module';
+import { BlogModule } from './models/blog/blog.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { FileUploadModule } from './models/file-upload/file-upload.module';
     PartnerModule,
     CloudinaryModule,
     FileUploadModule,
+    BlogModule,
   ],
   controllers: [AppController],
   providers: [

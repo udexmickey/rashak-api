@@ -23,14 +23,11 @@ export class PartnerService {
     return image;
   }
 
-  // // Tester multiple uploads Not to needed
-  // async TestUploadFiles(filename: Express.Multer.File) {
-  //   const image = await this.cloudinaryService.uploadImage(
-  //     filename,
-  //     'MultipleTestingFolder',
-  //   );
-  //   return image;
-  // }
+  // Tester multiple uploads Not to needed
+  async TestUploadFiles(filename: Express.Multer.File) {
+    const image = await this.cloudinaryService.uploadVideo(filename, 'Firms');
+    return image;
+  }
 
   async create(
     filename: Express.Multer.File,
@@ -45,7 +42,7 @@ export class PartnerService {
       const payload = {
         ...createPartnerDto,
         partnerId,
-        image: image.url,
+        image: image.secure_url,
       };
       const body = await this.partnerRepo.create(payload);
       const newPartner = await this.partnerRepo.save(body);

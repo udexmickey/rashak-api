@@ -27,7 +27,7 @@ export class BoardmembersService {
       const payload = {
         ...createBoardmemberDto,
         boardmemberId,
-        image: image.url,
+        image: image.secure_url,
       };
       // const payload = { ...createBoardmemberDto, boardmemberId };
       const newBoardmember = this.boardmemberRepo.create(payload);

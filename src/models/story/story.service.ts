@@ -21,7 +21,7 @@ export class StoryService {
         filename,
         'StoryFolder',
       );
-      const payload = { ...createStoryDto, storyId, image: image.url };
+      const payload = { ...createStoryDto, storyId, image: image.secure_url };
       const newStory = this.storyRepo.create(payload);
       return await this.storyRepo.save(newStory);
     } catch (error) {

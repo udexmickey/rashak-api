@@ -55,5 +55,6 @@ import { CurrentUserInterceptor } from './interceptors/current-admin.interceptor
     CurrentUserInterceptor,
     JWTStrategy,
   ],
+  exports: [CurrentUserInterceptor],
 })
 export class AuthModule {}

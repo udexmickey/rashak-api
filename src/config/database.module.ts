@@ -7,6 +7,7 @@ import { Story } from '../models/story/entities/story.entity';
 import { Location } from 'src/models/location/entities/location.entity';
 import { Partner } from 'src/models/partner/entities/partner.entity';
 import { TeamMember } from 'src/models/teammeber/entities/teammember.entity';
+import { Blog } from 'src/models/blog/entities/blog.entity';
 
 @Module({
   imports: [
@@ -17,7 +18,15 @@ import { TeamMember } from 'src/models/teammeber/entities/teammember.entity';
         host: configService.get('DATABASE_Host'),
         port: +configService.get('DATABASE_PORT'),
         database: configService.get('DATABASE_NAME_2'),
-        entities: [Admin, Boardmember, TeamMember, Story, Location, Partner],
+        entities: [
+          Admin,
+          Boardmember,
+          TeamMember,
+          Story,
+          Location,
+          Partner,
+          Blog,
+        ],
         synchronize: true,
         autoLoadEntities: true,
       }),

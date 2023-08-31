@@ -27,7 +27,7 @@ export class TeamMemberService {
       const payload = {
         ...createTeamMemberDto,
         teamMemberId,
-        image: image.url,
+        image: image.secure_url,
       };
       const newTeamMember = this.teamMemberRepo.create(payload);
       return await this.teamMemberRepo.save(newTeamMember);
