@@ -9,53 +9,42 @@ import { MailsController } from './mails.controller';
 @Global() // 👈 global module
 @Module({
   imports: [
-    MailerModule.forRoot({
-      transport: {
-        host: 'smtp.mail.yahoo.com',
-        port: 465,
-        secure: true, // upgrade later with STARTTLS
-        auth: {
-          user: 'dimgbamicheal@ymail.com',
-          pass: 'nbzholxhkzioibon',
+    ConfigModule,
+    MailerModule.forRootAsync({
+      useFactory: async (config: ConfigService) => ({
+        transport: {
+          host: 'smtp.mail.yahoo.com',
+          port: 465,
+          secure: false,
+          service: 'yahoo',
+          SSL: true,
+          auth: {
+            user: config.get<string>('MAILER_EMAIL'),
+            pass: config.get<string>('MAILER_PASSWORD'),
+          },
+          tls: {
+            rejectUnauthorized: false,
+          },
+          // logger: true,
+          // debug: true,
         },
-        // logger: true,
-        // debug: true,
-      },
-      // defaults: {
-      //   from: '"nest-modules" <modules@nestjs.com>',
-      // },
+        defaults: {
+          from: config.get<string>('MAILER_EMAIL'),
+        },
+        template: {
+          dir: join(__dirname, './templates'),
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
+      }),
+      //To use the config.get<string>('Your_env_string')
+      //you'll need to inject the config services👇👇👇
+      inject: [ConfigService],
     }),
-
-    // MailerModule.forRootAsync({
-    //   useFactory: () => ({
-    //     transport: {
-    //       host: 'smtp.mail.yahoo.com',
-    //       port: 465,
-    //       secure: true,
-    //       service: 'yahoo',
-    //       auth: {
-    //         // // TODO: replace `user` and `pass` values from:
-    //         // <https://forwardemail.net/guides/send-email-with-custom-domain-smtp>
-    //         user: 'dimgbamicheal@ymail.com',
-    //         pass: 'nbzholxhkzioibon',
-    //       },
-    //       logger: true,
-    //       debug: true,
-    //     },
-    //     // defaults: {
-    //     //   from: '"nest-modules" <modules@nestjs.com>',
-    //     // },
-    //     // template: {
-    //     //   // dir: process.cwd() + '/templates/',
-    //     //   // adapter: new HandlebarsAdapter(), // or new PugAdapter() or new EjsAdapter()
-    //     //   options: {
-    //     //     strict: true,
-    //     //   },
-    //     // },
-    //   }),
-    // }),
   ],
-  providers: [MailsService],
+  providers: [MailsService, ConfigService],
   exports: [MailsService],
   controllers: [MailsController],
 })

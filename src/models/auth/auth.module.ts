@@ -38,7 +38,6 @@ import { CurrentUserInterceptor } from './interceptors/current-admin.interceptor
         secret: config.get<string>('JWT_SECRET'),
         //This sets expiration time for jwt after login/signup
         signOptions: { expiresIn: config.get<string>('jwtExpiresTime') },
-        // signOptions: { expiresIn: config.get<string>('jwtExpiresTime') },
       }),
     }),
   ],
