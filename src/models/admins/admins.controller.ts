@@ -12,8 +12,10 @@ import { UpdateAdminDto } from './dto/update-admin.dto';
 import { SerializeResponse } from 'src/utils/Decorators/serializer.decorator';
 import { AdminDto } from '../auth/dto/admin.dto';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('admins')
+@ApiTags('Admin')
 @SerializeResponse(AdminDto)
 export class AdminsController {
   constructor(private readonly adminsService: AdminsService) {}
